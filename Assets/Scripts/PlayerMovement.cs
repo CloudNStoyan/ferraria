@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.Remoting.Metadata.W3cXsd2001;
+using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour {
@@ -29,9 +30,18 @@ public class PlayerMovement : MonoBehaviour {
     void Update()
     {
         rb.velocity = new Vector2(x, y);
-        speed = rb.velocity.x;
+        speed = x;
 
         onGround = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, whatIsGround);
+
+        if (!onGround)
+        {
+            y--;
+        }
+        else
+        {
+
+        }
 
         if (Input.GetKeyDown(KeyCode.A))
         {
@@ -47,7 +57,14 @@ public class PlayerMovement : MonoBehaviour {
 
         if (!Input.anyKey)
         {
-            Move(0, 0);
+            if (x > 0 && x != 0)
+            {
+                x-= (float)0.1;
+            }
+            else if (x != 0 && x < 0)
+            {
+                x += (float)0.1;
+            }
         }
 
     }
@@ -56,7 +73,7 @@ public class PlayerMovement : MonoBehaviour {
         if (onGround)
         {
             float percantage = (rb.velocity.x / 100) * 5;
-            rb.velocity = new Vector2(rb.velocity.x - 3, rb.velocity.y + 50);
+            rb.velocity = new Vector2(rb.velocity.x - percantage, rb.velocity.y + 50);
         }
     }
 
