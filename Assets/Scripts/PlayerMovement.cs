@@ -17,6 +17,7 @@ public class PlayerMovement : MonoBehaviour {
     public LayerMask whatIsGround;
     private bool onGround;
     public double speed;
+    private bool jumped;
 
     private float x;
     private float y;
@@ -34,13 +35,20 @@ public class PlayerMovement : MonoBehaviour {
 
         onGround = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, whatIsGround);
 
-        if (!onGround)
+        if (!onGround && y <= -2)
         {
-            y--;
+            y-= (float)0.2;
         }
         else
         {
-
+            if (jumped)
+            {
+                y += (float) 0.2;
+                if (y >= 5)
+                {
+                    jumped = false;
+                }
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.A))
@@ -73,7 +81,8 @@ public class PlayerMovement : MonoBehaviour {
         if (onGround)
         {
             float percantage = (rb.velocity.x / 100) * 5;
-            rb.velocity = new Vector2(rb.velocity.x - percantage, rb.velocity.y + 50);
+            rb.velocity = new Vector2(rb.velocity.x - percantage, rb.velocity.y);
+            jumped = true;
         }
     }
 
